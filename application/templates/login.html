@@ -1,17 +1,26 @@
     {% extends "layout.html" %}
    
     {% block content %}
-    <h2>Login</h2>
+    <h2>{{  title }}</h2>
 
     <div class="container">
-        <form name="login" action="login.php" method="get">
-            <label for="username"><b>Username</b></label>
-            <input type="text" placeholder="Enter Username" name="username" required>
-            <br>
-            <label for="password"><b>Password</b></label>
-            <input type="password" placeholder="Enter Password" name="password" required>
-            <br class="clear">
-            <input class="btn-submit" type="submit" name="submit" value="Login">
+        <form name="login" action="" method="POST">
+            {{  form.hidden_tag()   }}
+            <p>
+                {{  form.email.label    }}<br>
+                {{  form.email(size=35  )}}<br>
+            </p>
+            <p>
+                {{  form.password.label }}<br>
+                {{  form.password(size=15)  }}<br>
+            </p>
+            <p>
+                {{  form.remember_me.label }}<br>
+                {{  form.remember_me()  }}<br>
+            </p>
+            <p>
+                {{form.submit()}}<br>
+            </p>
         </form>
     </div>
     {% endblock %}

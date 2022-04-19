@@ -1,5 +1,4 @@
-from unittest.util import _MAX_LENGTH
-import flask
+
 from application import db
 
 class User(db.Document):
