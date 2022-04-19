@@ -1,5 +1,5 @@
 
-from application import app
+from application import app, db
 from flask import Response, render_template, request, json
 
 courseData = [{"courseID":"1111","title":"PHP 111","description":"Intro to PHP","credits":"3","term":"Fall, Spring"}, {"courseID":"2222","title":"Java 1","description":"Intro to Java Programming","credits":"4","term":"Spring"}, {"courseID":"3333","title":"Adv PHP 201","description":"Advanced PHP Programming","credits":"3","term":"Fall"}, {"courseID":"4444","title":"Angular 1","description":"Intro to Angular","credits":"3","term":"Fall, Spring"}, {"courseID":"5555","title":"Java 2","description":"Advanced Java Programming","credits":"4","term":"Fall"}]
@@ -41,3 +41,18 @@ def api(idx=None):
   else:
     jsonData = courseData[int(idx)]
   return Response(json.dumps(jsonData), mimetype="application/json")
+
+class User(db.Document):
+  user_id = db.IntField(unique=True)
+  first_name = db.StringField(maxLength=50)
+  last_name = db.StringField(maxLength=50)
+  email = db.StringField(maxLength=50)
+  password = db.StringField(maxLength=50)
+  
+@app.route("/user")
+def user():
+  # User(user_id = '1', first_name = 'Min', last_name = 'Lin', email = 'min-lin@hotmail.com', password = 'test123').save()
+  # User(user_id = '2', first_name = 'Tom', last_name = 'Hank', email = 'th@hotmail.com', password = 'thtest123').save()
+  users = User.objects.all()
+  return render_template("user.html", users = users)
+
