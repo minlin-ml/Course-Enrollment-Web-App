@@ -1,12 +1,19 @@
 
 from application import db
+from werkzeug.security import generate_password_hash, check_password_hash
 
 class User(db.Document):
   user_id = db.IntField(unique=True)
   first_name = db.StringField(maxLength=50)
   last_name = db.StringField(maxLength=50)
   email = db.StringField(maxLength=50)
-  password = db.StringField(maxLength=50)
+  password = db.StringField()
+
+  '''Use werkzug security to hash and unhash password'''
+  def set_password(self, password):
+    self.password = generate_password_hash(password)
+  def get_password(self, password):
+    return check_password_hash(self.password, password)
 
 class Course(db.Document):
   course_id = db.StringField( max_length=10, unique=True)
