@@ -6,7 +6,8 @@
         <form name="login" action="" method="POST" novalidate>
             <fieldset class="form-group">
                 <legend>{{ title }}</legend>
-            {{  form.hidden_tag()   }}
+            
+            {{  form.hidden_tag() }}
             <p>
                 {{  form.email.label    }}<br>
                 {{  form.email(size=35  )}}<br>
