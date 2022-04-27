@@ -19,7 +19,7 @@ class RegisterForm(FlaskForm):
 
   '''Validate the form email with database, return error if email exited'''
   def validate_email(self, email):
-    user = User.object(email=email.data).first()
+    user = User.objects(email=email.data).first()
     if user:
       raise ValidationError('The user is already in use. Pick another one or login the user.')
 

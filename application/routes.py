@@ -34,7 +34,12 @@ def courses(term="2019"):
 @app.route("/register", methods=["GET", "POST"])
 def register():
   form = RegisterForm()
-  return render_template("register.html", form=form, register=True)
+  if form.validate_on_submit():
+    if form.validate_email(request.form.get('email')):
+      return redirect("/login")
+    else:
+      flash("something might went wrong, please try to register again")
+  return render_template("register.html", title='Register', form=form, register=True)
 
 @app.route("/enrollment", methods=["GET", "POST"])
 def enrollment():
