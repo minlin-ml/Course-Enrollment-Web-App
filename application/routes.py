@@ -17,7 +17,10 @@ def index():
 def login():
   form = LoginForm()
   if form.validate_on_submit():
-    if request.form.get("email") == "test@utm.org":
+    email = form.email.data
+    password = form.password.data
+    user = User.objects(email=email).first()
+    if user and password == user.get_password(password):
       flash("You are successfully logged in!", "success")
       return redirect("/index")
     else:
