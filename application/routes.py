@@ -1,6 +1,6 @@
 
 from application import app, db
-from flask import Response, redirect, render_template, request, json, flash, redirect
+from flask import Response, redirect, render_template, request, json, flash, redirect, url_for
 from application.models import User, Course, Enrollment
 from application.forms import LoginForm, RegisterForm
 
@@ -20,7 +20,7 @@ def login():
     email = form.email.data
     password = form.password.data
     user = User.objects(email=email).first()
-    if user and password == user.get_password(password):
+    if user and user.get_password(password):
       flash("You are successfully logged in!", "success")
       return redirect("/index")
     else:
@@ -38,10 +38,23 @@ def courses(term="2019"):
 def register():
   form = RegisterForm()
   if form.validate_on_submit():
-    if form.validate_email(request.form.get('email')):
-      return redirect("/login")
-    else:
-      flash("something might went wrong, please try to register again")
+    user_id = User.objects.count()
+    user_id += 1
+
+    email = form.email.data
+    password = form.password.data
+    first_name = form.first_name.data
+    last_name = form.last_name.data
+
+    user = User(user_id = user_id,
+                first_name = first_name,
+                last_name = last_name,
+                email = email
+                )
+    user.set_password(password)
+    user.save()
+    flash("You're successfully registered!", "success")
+    return redirect(url_for('index'))
   return render_template("register.html", title='Register', form=form, register=True)
 
 @app.route("/enrollment", methods=["GET", "POST"])

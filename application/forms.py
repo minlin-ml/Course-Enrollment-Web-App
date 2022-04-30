@@ -1,3 +1,4 @@
+from email import message
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField, BooleanField
 from wtforms.validators import DataRequired, Email, Length, EqualTo, ValidationError
@@ -21,7 +22,6 @@ class RegisterForm(FlaskForm):
   def validate_email(self, email):
     user = User.objects(email=email.data).first()
     if user:
-      raise ValidationError('The user is already in use. Pick another one or login the user.')
-
-
+      raise ValidationError("The user is already in use. Pick another one or login the user.")
+      
 
