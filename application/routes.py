@@ -29,10 +29,12 @@ def login():
 
 @app.route("/courses")
 @app.route("/courses/<term>") 
-def courses(term="2019"):
-  
+def courses(term=None):
+  if term is None:
+    term = "Spring 2019"
 
-  return render_template("courses.html", courseData=courseData, courses=True, term=term)
+  classes = Course.objects.order_by('courseID')
+  return render_template("courses.html", courseData=classes, courses=True, term=term)
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
@@ -55,6 +57,7 @@ def register():
     user.save()
     flash("You're successfully registered!", "success")
     return redirect(url_for('index'))
+    
   return render_template("register.html", title='Register', form=form, register=True)
 
 @app.route("/enrollment", methods=["GET", "POST"])

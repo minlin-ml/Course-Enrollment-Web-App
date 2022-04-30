@@ -16,13 +16,13 @@ class User(db.Document):
     return check_password_hash(self.password, password)
 
 class Course(db.Document):
-  course_id = db.StringField( max_length=10, unique=True)
-  title = db.StringField( max_length=100)
+  courseID    = db.StringField( max_length=10, unique=True)
+  title       = db.StringField( max_length=100)
   description = db.StringField( max_length=255)
-  credicts = db.IntField()
-  term = db.StringField( max_length=25)
+  credits    = db.IntField()
+  term        = db.StringField( max_length=25)
 
 class Enrollment(db.Document):
-  user_id = db.IntField()
-  course_id = db.StringField( max_length=10)
+  user_id   = db.IntField()
+  courseID  = db.StringField( max_length=10)
 
