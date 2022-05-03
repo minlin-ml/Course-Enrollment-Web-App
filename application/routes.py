@@ -29,6 +29,12 @@ def login():
       flash("Something might went wrong, please try again!", "danger")
   return render_template("login.html", title= 'Login', form=form, login=True)
 
+@app.route("/logout")
+def logout():
+  session['user_id'] = False
+  session.pop('username', None)
+  return redirect(url_for('index'))
+
 @app.route("/courses")
 @app.route("/courses/<term>") 
 def courses(term=None):
@@ -65,10 +71,13 @@ def register():
   return render_template("register.html", title='Register', form=form, register=True)
 
 @app.route("/enrollment", methods=["GET", "POST"])
-def enrollment():
+def enrollment():  
+  if session.get('username'):
+    return redirect(url_for('index'))
+
   courseID = request.form.get('courseID')
   courseTitle = request.form.get('title')
-  user_id = 1
+  user_id = session.get('user_id')
   if courseID:
     if Enrollment.objects(user_id=user_id, courseID=courseID):
       flash(f"Opps! You are already registered in this course {courseTitle}!","danger" )
@@ -123,6 +132,7 @@ def api(idx=None):
   else:
     jsonData = courseData[int(idx)]
   return Response(json.dumps(jsonData), mimetype="application/json")
+
 
 
   
