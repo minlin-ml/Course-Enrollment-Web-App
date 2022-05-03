@@ -108,7 +108,7 @@ def enrollment():
   term = request.form.get('term')
   return render_template("enrollment.html", enrollment=True, title = "Enrollment", classes=classes)
 
-@app.route("/api/")
+@app.route("/api/") 
 @app.route("/api/<idx>")
 def api(idx=None):
   if(idx==None):
