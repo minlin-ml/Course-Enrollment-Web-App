@@ -72,7 +72,7 @@ def register():
 
 @app.route("/enrollment", methods=["GET", "POST"])
 def enrollment():  
-  if session.get('username'):
+  if not session.get('username'):
     return redirect(url_for('index'))
 
   courseID = request.form.get('courseID')
