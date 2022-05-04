@@ -1,9 +1,11 @@
 
 from application import app, db, api
 from flask import Response, jsonify, redirect, render_template, request, json, jsonify, flash, redirect, url_for, session
+from application.course_list import course_list
 from application.models import User, Course, Enrollment
 from application.forms import LoginForm, RegisterForm
 from flask_restx import Resource, Api
+from application.course_list import course_list
 
 #################################################
 
@@ -126,42 +128,7 @@ def enrollment():
     else:
       Enrollment(user_id=user_id,courseID=courseID).save()
       flash(f"You registered to {courseTitle} successfully!", "success")
-  classes = list(User.objects.aggregate(*[
-          {
-              '$lookup': {
-                  'from': 'enrollment', 
-                  'localField': 'user_id', 
-                  'foreignField': 'user_id', 
-                  'as': 'r1'
-              }
-          }, {
-              '$unwind': {
-                  'path': '$r1', 
-                  'includeArrayIndex': 'r1.id', 
-                  'preserveNullAndEmptyArrays': False
-              }
-          }, {
-              '$lookup': {
-                  'from': 'course', 
-                  'localField': 'r1.courseID', 
-                  'foreignField': 'courseID', 
-                  'as': 'r2'
-              }
-          }, {
-              '$unwind': {
-                  'path': '$r2', 
-                  'preserveNullAndEmptyArrays': False
-              }
-          }, {
-              '$match': {
-                  'user_id': user_id
-              }
-          }, {
-              '$sort': {
-                  'courseID': 1
-              }
-          }
-      ]))
+  classes = course_list()
   term = request.form.get('term')
   return render_template("enrollment.html", enrollment=True, title = "Enrollment", classes=classes)
 
