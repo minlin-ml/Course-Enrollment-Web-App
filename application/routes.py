@@ -1,8 +1,26 @@
 
-from application import app, db
-from flask import Response, redirect, render_template, request, json, flash, redirect, url_for, session
+from application import app, db, api
+from flask import Response, jsonify, redirect, render_template, request, json, jsonify, flash, redirect, url_for, session
 from application.models import User, Course, Enrollment
 from application.forms import LoginForm, RegisterForm
+from flask_restx import Resource, Api
+
+#################################################
+
+@api.route('/api','/api/')
+class GetAndPost(Resource):
+  def get(self):
+    return jsonify(User.objects.all())
+
+@api.route('/api/<idx>')
+class GetUpdateDelete(Resource):
+  def get(self,idx):
+    return jsonify(User.objects(user_id=idx))
+
+
+
+
+#################################################
 
 @app.route("/")
 @app.route("/index")
@@ -72,7 +90,7 @@ def register():
 
 @app.route("/enrollment", methods=["GET", "POST"])
 def enrollment():  
-  if session.get('username'):
+  if not session.get('username'):
     return redirect(url_for('index'))
 
   courseID = request.form.get('courseID')
