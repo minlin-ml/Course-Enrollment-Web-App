@@ -32,6 +32,10 @@ class GetUpdateDelete(Resource):
   def get(self,idx):
     return jsonify(User.objects(user_id=idx))
 
+  def put(self, idx):
+    data = request.get_json()
+    User.objects(user_id=idx).update(**data)
+    return jsonify(User.objects(user_id=idx))
 
 
 #################################################
